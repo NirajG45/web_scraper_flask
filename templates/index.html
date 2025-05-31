@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Scraper</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Python Web Scraper</h1>
+        <form method="POST">
+            <input type="text" name="url" placeholder="Enter URL (e.g., https://example.com)" required>
+            <button type="submit">Scrape</button>
+        </form>
+
+        {% if data.success %}
+            <div class="result">
+                <h2>Page Title:</h2>
+                <p>{{ data.title }}</p>
+
+                <h2>Headings</h2>
+                <h3>H1:</h3>
+                <ul>{% for h in data.h1 %}<li>{{ h }}</li>{% endfor %}</ul>
+
+                <h3>H2:</h3>
+                <ul>{% for h in data.h2 %}<li>{{ h }}</li>{% endfor %}</ul>
+
+                <h3>H3:</h3>
+                <ul>{% for h in data.h3 %}<li>{{ h }}</li>{% endfor %}</ul>
+            </div>
+        {% elif data.error %}
+            <p class="error">{{ data.error }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
