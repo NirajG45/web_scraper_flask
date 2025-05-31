@@ -2,59 +2,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Web Scraper</title>
+    <title>Python Web Scraper</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>🔍 Python Web Scraper</h1>
-        <p class="description">
-            This tool allows you to extract key information from any public webpage, including:
-            page title, headings, meta description, and links.
-        </p>
+        <h1>🌐 Python Web Scraper</h1>
+        <p class="description">Extract titles, headings, meta info, and links from any public website with ease.</p>
 
         <form method="POST">
-            <input type="text" name="url" placeholder="Enter URL (e.g., https://example.com)" required>
-            <button type="submit">Scrape</button>
+            <div class="form-group">
+                <input type="text" name="url" placeholder="Enter full URL (e.g., https://example.com)" required>
+                <button type="submit">🔍 Scrape</button>
+            </div>
         </form>
 
-        <!-- Loader -->
+        <!-- Loader Spinner -->
         <div id="loader" class="loader" style="display:none;">
             <div class="spinner"></div>
-            <p>Scraping in progress, please wait...</p>
+            <p>Scraping in progress...</p>
         </div>
 
         {% if data.success %}
-            <div class="result">
-                <h2>✅ Scraping Result</h2>
+        <div class="results">
 
-                {% if data.favicon %}
-                    <img src="{{ data.favicon }}" alt="Favicon" class="favicon">
-                {% endif %}
+            {% if data.favicon %}
+                <img src="{{ data.favicon }}" alt="Favicon" class="favicon">
+            {% endif %}
 
-                <h3>Title:</h3>
+            <div class="card">
+                <h2>🔖 Title</h2>
                 <p>{{ data.title }}</p>
+            </div>
 
-                <h3>Meta Description:</h3>
+            <div class="card">
+                <h2>📝 Meta Description</h2>
                 <p>{{ data.meta_description }}</p>
+            </div>
 
-                <h3>Headings:</h3>
+            <div class="card">
+                <h2>📌 Headings</h2>
                 <strong>H1:</strong>
                 <ul>{% for h in data.h1 %}<li>{{ h }}</li>{% endfor %}</ul>
-
                 <strong>H2:</strong>
                 <ul>{% for h in data.h2 %}<li>{{ h }}</li>{% endfor %}</ul>
-
                 <strong>H3:</strong>
                 <ul>{% for h in data.h3 %}<li>{{ h }}</li>{% endfor %}</ul>
+            </div>
 
-                <h3>🔗 All Links Found:</h3>
+            <div class="card">
+                <h2>🔗 Links Found</h2>
                 <ul>
                     {% for link in data.links %}
                         <li><a href="{{ link }}" target="_blank">{{ link }}</a></li>
                     {% endfor %}
                 </ul>
             </div>
+        </div>
         {% elif data.error %}
             <p class="error">{{ data.error }}</p>
         {% endif %}

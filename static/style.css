@@ -1,81 +1,79 @@
 body {
     font-family: 'Segoe UI', sans-serif;
-    background-color: #f4f6f8;
-    padding: 40px;
+    background: linear-gradient(to right, #e0f7fa, #ffffff);
+    margin: 0;
+    padding: 30px 20px;
     color: #333;
 }
 
 .container {
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 12px;
-    width: 80%;
+    max-width: 1000px;
     margin: auto;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 h1 {
     text-align: center;
     color: #007bff;
+    margin-bottom: 10px;
 }
 
 .description {
-    font-size: 15px;
-    margin-bottom: 25px;
     text-align: center;
+    margin-bottom: 25px;
+    font-size: 16px;
+    color: #555;
+}
+
+.form-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 input[type="text"] {
-    width: 70%;
-    padding: 10px;
+    padding: 12px;
+    width: 60%;
+    max-width: 500px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
     font-size: 16px;
-    margin-right: 10px;
 }
 
 button {
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 12px 20px;
     background: #007bff;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
 }
 
 button:hover {
     background: #0056b3;
 }
 
-.result {
-    margin-top: 30px;
-}
-
-ul {
-    padding-left: 20px;
-}
-
-.error {
-    color: red;
-    font-weight: bold;
-    text-align: center;
-}
-
-.favicon {
-    height: 32px;
-    width: 32px;
-    vertical-align: middle;
-    margin-bottom: 10px;
-}
-
 .loader {
-    margin-top: 20px;
     text-align: center;
+    margin-top: 20px;
 }
 
 .spinner {
     width: 50px;
     height: 50px;
-    border: 6px solid #f3f3f3;
+    border: 6px solid #ddd;
     border-top: 6px solid #007bff;
     border-radius: 50%;
     animation: spin 1s linear infinite;
@@ -85,4 +83,57 @@ ul {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.results {
+    margin-top: 30px;
+}
+
+.card {
+    background: #f9f9f9;
+    padding: 20px;
+    border-left: 6px solid #007bff;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.card h2 {
+    margin-top: 0;
+    color: #007bff;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+ul li {
+    margin-bottom: 6px;
+}
+
+a {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.error {
+    text-align: center;
+    color: red;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.favicon {
+    display: block;
+    margin: 0 auto 10px auto;
+    width: 32px;
+    height: 32px;
 }
