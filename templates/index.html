@@ -1,114 +1,189 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Python Web Scraper</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <meta charset="UTF-8" />
+    <title>Python Web Scraper</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-  <div class="container" id="container">
-    <h1>🌐 Python Web Scraper</h1>
-    <p class="description">
-      Extract titles, headings, meta info, and links from any public website with ease.
-    </p>
+    <div class="container">
+        <h1>🌐 Python Web Scraper</h1>
+        <p class="description">Extract titles, headings, meta info, and links from any public website with ease.</p>
 
-    <!-- Dark/Light toggle -->
-    <button id="toggleThemeBtn" class="theme-toggle">🌙 Dark Mode</button>
+        <!-- Dark/Light Mode Toggle Button -->
+        <div style="text-align: center; margin-bottom: 20px;">
+            <button id="toggleThemeBtn" type="button" aria-label="Toggle dark and light mode">☀️ Light Mode</button>
+        </div>
 
-    <form method="POST">
-      <div class="form-group">
-        <input
-          type="text"
-          name="url"
-          placeholder="Enter full URL (e.g., https://example.com)"
-          required
-        />
-        <select name="file_format" aria-label="Download format">
-          <option value="">No Download</option>
-          <option value="csv">Download CSV</option>
-          <option value="json">Download JSON</option>
-        </select>
-        <button type="submit">🔍 Scrape</button>
-      </div>
-    </form>
+        <form method="POST" aria-label="URL input form">
+            <div class="form-group">
+                <input
+                    type="text"
+                    name="url"
+                    placeholder="Enter full URL (e.g., https://example.com)"
+                    required
+                    aria-required="true"
+                />
+                <button type="submit" aria-label="Scrape website">🔍 Scrape</button>
+            </div>
+        </form>
 
-    <!-- Loader Spinner -->
-    <div id="loader" class="loader" style="display:none;">
-      <div class="spinner"></div>
-      <p>Scraping in progress...</p>
+        <!-- Loader Spinner -->
+        <div id="loader" class="loader" style="display: none;">
+            <div class="spinner"></div>
+            <p>Scraping in progress...</p>
+        </div>
+
+        <!-- Screenshot Preview Section -->
+        {% if data.screenshot_url %}
+        <div class="results screenshot-card">
+            <h2>📸 Website Screenshot Preview</h2>
+            <img src="{{ data.screenshot_url }}" alt="Website Screenshot" class="screenshot" />
+        </div>
+        {% endif %}
+
+        {% if data.success %}
+        <div class="results">
+            {% if data.favicon %}
+            <img src="{{ data.favicon }}" alt="Favicon" class="favicon" />
+            {% endif %}
+
+            <div class="card">
+                <h2>🔖 Title</h2>
+                <p>{{ data.title }}</p>
+            </div>
+
+            <div class="card">
+                <h2>📝 Meta Description</h2>
+                <p>{{ data.meta_description }}</p>
+            </div>
+
+            <div class="card">
+                <h2>📌 Headings</h2>
+                <strong>H1:</strong>
+                <ul>{% for h in data.h1 %}<li>{{ h }}</li>{% endfor %}</ul>
+                <strong>H2:</strong>
+                <ul>{% for h in data.h2 %}<li>{{ h }}</li>{% endfor %}</ul>
+                <strong>H3:</strong>
+                <ul>{% for h in data.h3 %}<li>{{ h }}</li>{% endfor %}</ul>
+            </div>
+
+            <div class="card">
+                <h2>🔗 Links Found</h2>
+                <ul>
+                    {% for link in data.links %}
+                    <li><a href="{{ link }}" target="_blank" rel="noopener noreferrer">{{ link }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Export buttons -->
+            <div style="text-align: center; margin-top: 20px;">
+                <button id="exportCsvBtn" type="button" aria-label="Export data as CSV">📥 Export CSV</button>
+                <button id="exportJsonBtn" type="button" aria-label="Export data as JSON">📥 Export JSON</button>
+            </div>
+        </div>
+        {% elif data.error %}
+        <p class="error" id="errorMessage">{{ data.error }}
+          <button id="dismissErrorBtn" aria-label="Dismiss error message" style="margin-left: 10px;">✖</button>
+        </p>
+        {% endif %}
     </div>
 
-    {% if data.success %}
-    <div class="results">
-
-      {% if data.favicon %}
-      <img src="{{ data.favicon }}" alt="Favicon" class="favicon" />
-      {% endif %}
-
-      {% if data.screenshot %}
-      <div class="card screenshot-card">
-        <h2>📸 Website Screenshot</h2>
-        <img src="{{ data.screenshot }}" alt="Website Screenshot" class="screenshot" />
-      </div>
-      {% endif %}
-
-      <div class="card">
-        <h2>🔖 Title</h2>
-        <p>{{ data.title }}</p>
-      </div>
-
-      <div class="card">
-        <h2>📝 Meta Description</h2>
-        <p>{{ data.meta_description }}</p>
-      </div>
-
-      <div class="card">
-        <h2>📌 Headings</h2>
-        <strong>H1:</strong>
-        <ul>{% for h in data.h1 %}<li>{{ h }}</li>{% endfor %}</ul>
-        <strong>H2:</strong>
-        <ul>{% for h in data.h2 %}<li>{{ h }}</li>{% endfor %}</ul>
-        <strong>H3:</strong>
-        <ul>{% for h in data.h3 %}<li>{{ h }}</li>{% endfor %}</ul>
-      </div>
-
-      <div class="card">
-        <h2>🔗 Links Found</h2>
-        <ul>
-          {% for link in data.links %}
-          <li><a href="{{ link }}" target="_blank">{{ link }}</a></li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-    {% elif data.error %}
-    <p class="error">{{ data.error }}</p>
+    <!-- ✅ JSON embedding done correctly -->
+    {% if data %}
+    <script id="scrapedDataJson" type="application/json">{{ data | tojson | safe }}</script>
     {% endif %}
-  </div>
 
-  <script>
+<script>
     document.addEventListener("DOMContentLoaded", function () {
-      const form = document.querySelector("form");
-      const loader = document.getElementById("loader");
-      const toggleBtn = document.getElementById("toggleThemeBtn");
-      const container = document.getElementById("container");
+        const form = document.querySelector("form");
+        const loader = document.getElementById("loader");
+        const toggleBtn = document.getElementById("toggleThemeBtn");
+        const body = document.body;
 
-      // Show loader on form submit
-      form.addEventListener("submit", function () {
-        loader.style.display = "block";
-      });
+        // Show loader on form submit
+        form?.addEventListener("submit", function () {
+            loader.style.display = "block";
+        });
 
-      // Dark/Light toggle
-      toggleBtn.addEventListener("click", () => {
-        document.body.classList.toggle("dark-mode");
-        if (document.body.classList.contains("dark-mode")) {
-          toggleBtn.textContent = "☀️ Light Mode";
+        // Load theme from localStorage
+        if (localStorage.getItem("theme") === "light") {
+            body.classList.add("light-mode");
+            toggleBtn.textContent = "🌙 Dark Mode";
         } else {
-          toggleBtn.textContent = "🌙 Dark Mode";
+            toggleBtn.textContent = "☀️ Light Mode";
         }
-      });
+
+        // Toggle light/dark mode
+        toggleBtn?.addEventListener("click", () => {
+            body.classList.toggle("light-mode");
+            const isLight = body.classList.contains("light-mode");
+            toggleBtn.textContent = isLight ? "🌙 Dark Mode" : "☀️ Light Mode";
+            localStorage.setItem("theme", isLight ? "light" : "dark");
+        });
+
+        // Export buttons
+        const exportCsvBtn = document.getElementById("exportCsvBtn");
+        const exportJsonBtn = document.getElementById("exportJsonBtn");
+
+        // File downloader helper
+        function downloadFile(filename, content, type) {
+            const blob = new Blob([content], { type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // ✅ Safely parse embedded JSON
+        function getScrapedData() {
+            try {
+                const raw = document.getElementById("scrapedDataJson");
+                return raw ? JSON.parse(raw.textContent) : {};
+            } catch (e) {
+                console.error("Error parsing JSON:", e);
+                return {};
+            }
+        }
+
+        // CSV Export
+        exportCsvBtn?.addEventListener("click", () => {
+            const data = getScrapedData();
+            let csv = "Field,Value\n";
+
+            csv += `"Title","${(data.title || "").replace(/"/g, '""')}"\n`;
+            csv += `"Meta Description","${(data.meta_description || "").replace(/"/g, '""')}"\n`;
+
+            ["h1", "h2", "h3"].forEach(level => {
+                const values = Array.isArray(data[level]) ? data[level].join("; ") : "";
+                csv += `"${level.toUpperCase()} Headings","${values.replace(/"/g, '""')}"\n`;
+            });
+
+            const links = Array.isArray(data.links) ? data.links.join("; ") : "";
+            csv += `"Links","${links.replace(/"/g, '""')}"\n`;
+
+            downloadFile("scraped_data.csv", csv, "text/csv");
+        });
+
+        // JSON Export
+        exportJsonBtn?.addEventListener("click", () => {
+            const data = getScrapedData();
+            downloadFile("scraped_data.json", JSON.stringify(data, null, 2), "application/json");
+        });
+
+        // Dismiss error message
+        const dismissErrorBtn = document.getElementById("dismissErrorBtn");
+        dismissErrorBtn?.addEventListener("click", () => {
+            const err = document.getElementById("errorMessage");
+            if (err) err.style.display = "none";
+        });
     });
-  </script>
+</script>
 </body>
 </html>
