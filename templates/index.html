@@ -1,94 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python Web Scraper</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8" />
+  <title>Python Web Scraper</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-    <div class="container">
-        <h1>🌐 Python Web Scraper</h1>
-        <p class="description">Extract titles, headings, meta info, and links from any public website with ease.</p>
+  <div class="container" id="container">
+    <h1>🌐 Python Web Scraper</h1>
+    <p class="description">
+      Extract titles, headings, meta info, and links from any public website with ease.
+    </p>
 
-        <form method="POST">
-            <div class="form-group">
-                <input type="text" name="url" placeholder="Enter full URL (e.g., https://example.com)" required>
-                <button type="submit">🔍 Scrape</button>
-            </div>
-        </form>
+    <!-- Dark/Light toggle -->
+    <button id="toggleThemeBtn" class="theme-toggle">🌙 Dark Mode</button>
 
-        <!-- Loader Spinner -->
-        <div id="loader" class="loader" style="display:none;">
-            <div class="spinner"></div>
-            <p>Scraping in progress...</p>
-        </div>
+    <form method="POST">
+      <div class="form-group">
+        <input
+          type="text"
+          name="url"
+          placeholder="Enter full URL (e.g., https://example.com)"
+          required
+        />
+        <select name="file_format" aria-label="Download format">
+          <option value="">No Download</option>
+          <option value="csv">Download CSV</option>
+          <option value="json">Download JSON</option>
+        </select>
+        <button type="submit">🔍 Scrape</button>
+      </div>
+    </form>
 
-        {% if data.success %}
-        <div class="results">
-
-            <div class="card favicon-card">
-                {% if data.favicon %}
-                    <img src="{{ data.favicon }}" alt="Favicon" class="favicon">
-                    <p>Website Favicon</p>
-                {% endif %}
-            </div>
-
-            <div class="card">
-                <h2>🔖 Title</h2>
-                <p>{{ data.title }}</p>
-            </div>
-
-            <div class="card">
-                <h2>📝 Meta Description</h2>
-                <p>{{ data.meta_description }}</p>
-            </div>
-
-            <div class="card">
-                <h2>📌 Headings</h2>
-                <div class="headings">
-                    <div>
-                        <strong>H1:</strong>
-                        <ul>{% for h in data.h1 %}<li>{{ h }}</li>{% endfor %}</ul>
-                    </div>
-                    <div>
-                        <strong>H2:</strong>
-                        <ul>{% for h in data.h2 %}<li>{{ h }}</li>{% endfor %}</ul>
-                    </div>
-                    <div>
-                        <strong>H3:</strong>
-                        <ul>{% for h in data.h3 %}<li>{{ h }}</li>{% endfor %}</ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>🔗 Links Found</h2>
-                <ul class="link-list">
-                    {% for link in data.links %}
-                        <li>
-                            <a href="{{ link }}" target="_blank">
-                                {{ link }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        {% elif data.error %}
-            <p class="error">⚠️ {{ data.error }}</p>
-        {% endif %}
+    <!-- Loader Spinner -->
+    <div id="loader" class="loader" style="display:none;">
+      <div class="spinner"></div>
+      <p>Scraping in progress...</p>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const form = document.querySelector("form");
-            const loader = document.getElementById("loader");
+    {% if data.success %}
+    <div class="results">
 
-            form.addEventListener("submit", function () {
-                loader.style.display = "block";
-            });
-        });
-    </script>
+      {% if data.favicon %}
+      <img src="{{ data.favicon }}" alt="Favicon" class="favicon" />
+      {% endif %}
+
+      {% if data.screenshot %}
+      <div class="card screenshot-card">
+        <h2>📸 Website Screenshot</h2>
+        <img src="{{ data.screenshot }}" alt="Website Screenshot" class="screenshot" />
+      </div>
+      {% endif %}
+
+      <div class="card">
+        <h2>🔖 Title</h2>
+        <p>{{ data.title }}</p>
+      </div>
+
+      <div class="card">
+        <h2>📝 Meta Description</h2>
+        <p>{{ data.meta_description }}</p>
+      </div>
+
+      <div class="card">
+        <h2>📌 Headings</h2>
+        <strong>H1:</strong>
+        <ul>{% for h in data.h1 %}<li>{{ h }}</li>{% endfor %}</ul>
+        <strong>H2:</strong>
+        <ul>{% for h in data.h2 %}<li>{{ h }}</li>{% endfor %}</ul>
+        <strong>H3:</strong>
+        <ul>{% for h in data.h3 %}<li>{{ h }}</li>{% endfor %}</ul>
+      </div>
+
+      <div class="card">
+        <h2>🔗 Links Found</h2>
+        <ul>
+          {% for link in data.links %}
+          <li><a href="{{ link }}" target="_blank">{{ link }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% elif data.error %}
+    <p class="error">{{ data.error }}</p>
+    {% endif %}
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.querySelector("form");
+      const loader = document.getElementById("loader");
+      const toggleBtn = document.getElementById("toggleThemeBtn");
+      const container = document.getElementById("container");
+
+      // Show loader on form submit
+      form.addEventListener("submit", function () {
+        loader.style.display = "block";
+      });
+
+      // Dark/Light toggle
+      toggleBtn.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        if (document.body.classList.contains("dark-mode")) {
+          toggleBtn.textContent = "☀️ Light Mode";
+        } else {
+          toggleBtn.textContent = "🌙 Dark Mode";
+        }
+      });
+    });
+  </script>
 </body>
 </html>
