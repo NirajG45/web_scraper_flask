@@ -1,22 +1,35 @@
 body {
-    font-family: Arial, sans-serif;
-    background: #f0f2f5;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f6f8;
     padding: 40px;
+    color: #333;
 }
 
 .container {
-    background: #fff;
+    background: #ffffff;
     padding: 30px;
-    border-radius: 10px;
-    width: 60%;
+    border-radius: 12px;
+    width: 80%;
     margin: auto;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #007bff;
+}
+
+.description {
+    font-size: 15px;
+    margin-bottom: 25px;
+    text-align: center;
 }
 
 input[type="text"] {
     width: 70%;
     padding: 10px;
     font-size: 16px;
+    margin-right: 10px;
 }
 
 button {
@@ -25,19 +38,31 @@ button {
     background: #007bff;
     color: white;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
-    margin-left: 10px;
 }
 
 button:hover {
     background: #0056b3;
 }
 
-.result h2, .result h3 {
-    margin-top: 20px;
+.result {
+    margin-top: 30px;
+}
+
+ul {
+    padding-left: 20px;
 }
 
 .error {
     color: red;
     font-weight: bold;
+    text-align: center;
+}
+
+.favicon {
+    height: 32px;
+    width: 32px;
+    vertical-align: middle;
+    margin-bottom: 10px;
 }
