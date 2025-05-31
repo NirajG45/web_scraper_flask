@@ -23,7 +23,7 @@ body {
 
 h1 {
     text-align: center;
-    color: #4fc3f7; /* lighter blue */
+    color: #4fc3f7;
     margin-bottom: 10px;
 }
 
@@ -211,4 +211,97 @@ body.light-mode button:hover {
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(79, 195, 247, 0.4);
     margin-top: 10px;
+}
+
+/* Parallax Cloud Background */
+.parallax-clouds {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background: url('clouds.png') repeat-x;
+    animation: cloudScroll 60s linear infinite;
+    opacity: 0.15;
+    z-index: 0;
+}
+
+@keyframes cloudScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+/* Night Sky Stars (Dark Mode) */
+body.dark-mode::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent url('stars.png') repeat;
+    z-index: -1;
+    opacity: 0.2;
+}
+
+/* Weather Info Card */
+.weather-info {
+    margin-top: 20px;
+    padding: 20px;
+    background: #1e1e1e;
+    border-left: 6px solid #4fc3f7;
+    border-radius: 10px;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.weather-info h3 {
+    margin-top: 0;
+    color: #4fc3f7;
+    font-size: 20px;
+}
+
+.weather-info p {
+    margin: 6px 0;
+    font-size: 16px;
+}
+
+/* Light Mode Weather Card */
+body.light-mode .weather-info {
+    background: #f1f1f1;
+    color: #222;
+    border-left-color: #0288d1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .weather-info h3 {
+    color: #0288d1;
+}
+
+/* Form Save Confirmation */
+.save-msg {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+    color: #66bb6a;
+    font-style: italic;
+}
+
+/* Timestamp Style */
+.timestamp {
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* Cloud Z-index Fix */
+.container,
+.results,
+.loader,
+.description,
+.form-group,
+h1 {
+    position: relative;
+    z-index: 1;
 }
