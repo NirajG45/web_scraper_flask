@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Python Web Scraper</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
@@ -26,9 +27,12 @@
         {% if data.success %}
         <div class="results">
 
-            {% if data.favicon %}
-                <img src="{{ data.favicon }}" alt="Favicon" class="favicon">
-            {% endif %}
+            <div class="card favicon-card">
+                {% if data.favicon %}
+                    <img src="{{ data.favicon }}" alt="Favicon" class="favicon">
+                    <p>Website Favicon</p>
+                {% endif %}
+            </div>
 
             <div class="card">
                 <h2>🔖 Title</h2>
@@ -42,25 +46,37 @@
 
             <div class="card">
                 <h2>📌 Headings</h2>
-                <strong>H1:</strong>
-                <ul>{% for h in data.h1 %}<li>{{ h }}</li>{% endfor %}</ul>
-                <strong>H2:</strong>
-                <ul>{% for h in data.h2 %}<li>{{ h }}</li>{% endfor %}</ul>
-                <strong>H3:</strong>
-                <ul>{% for h in data.h3 %}<li>{{ h }}</li>{% endfor %}</ul>
+                <div class="headings">
+                    <div>
+                        <strong>H1:</strong>
+                        <ul>{% for h in data.h1 %}<li>{{ h }}</li>{% endfor %}</ul>
+                    </div>
+                    <div>
+                        <strong>H2:</strong>
+                        <ul>{% for h in data.h2 %}<li>{{ h }}</li>{% endfor %}</ul>
+                    </div>
+                    <div>
+                        <strong>H3:</strong>
+                        <ul>{% for h in data.h3 %}<li>{{ h }}</li>{% endfor %}</ul>
+                    </div>
+                </div>
             </div>
 
             <div class="card">
                 <h2>🔗 Links Found</h2>
-                <ul>
+                <ul class="link-list">
                     {% for link in data.links %}
-                        <li><a href="{{ link }}" target="_blank">{{ link }}</a></li>
+                        <li>
+                            <a href="{{ link }}" target="_blank">
+                                {{ link }}
+                            </a>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
         </div>
         {% elif data.error %}
-            <p class="error">{{ data.error }}</p>
+            <p class="error">⚠️ {{ data.error }}</p>
         {% endif %}
     </div>
 
